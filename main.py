@@ -6,12 +6,13 @@ import json
 class FifteenAICharacters:
     # Portal
     GLaDOS = "GLaDOS"
-    # Wheatley = "Wheatley"
+    Wheatley = "Wheatley"
 
     # MLP
     TwilightSparkle = "Twilight Sparkle"
     Fluttershy = "Fluttershy"
     Rarity = "Rarity"
+    PrincessCelestia = "Princess Celestia"
 
     # The Stanley Parable
     TheNarrator = "The Narrator"
@@ -21,6 +22,10 @@ class FifteenAICharacters:
 
     # Undertale
     Sans = "Sans"
+
+    # Team Fortress 2
+    Soldier = "Soldier"
+    #Pyro = "Pyro"
 
 class FifteenAI:
 
@@ -95,6 +100,6 @@ class FifteenAI:
 if __name__ == "__main__":
     fifteen = FifteenAI()
     fifteen.get(
-        "Did you just run the script without arguments? That's so clever. You must be proud of yourself.",
+        "This is a test. I think it's a test. Isn't this a test?",
         FifteenAICharacters.GLaDOS
     )
