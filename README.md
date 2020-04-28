@@ -8,12 +8,18 @@ Unofficial Python3 API for https://fifteen.ai/
 - If you want to publish the generated content online, you should include a citation (simply including 15.ai is sufficient).
   
 These are simple rules, please follow them. Don't be that guy.
+
+
 Refer to [About](https://fifteen.ai/about) and [FAQ](https://fifteen.ai/faq) for more info.
+
+
 Keep in mind that the 15.ai is constantly changing and improving, and this script may and eventually will break and will require updating. If it does not work, create issue, or, even better, pull request to fix that.
 
   
 ## Installation
 Requires `python >= 3.6`
+
+
 Note: on Windows, in this and the following commands instead of `python3`, you may want to use `python`
 
 Install dependencies
@@ -50,7 +56,7 @@ Example output
 
     tts_api.get_character_emotions_list("Twilight Sparkle")
 
-Example outputЖ
+Example output:
 
     ['Happy', 'Neutral']
 #### Save TTS to file:
