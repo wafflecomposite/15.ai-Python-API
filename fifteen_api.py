@@ -106,7 +106,10 @@ class FifteenAPI:
     def is_character_exist(self, character):
         return character in self.characters_data
 
-    def get_character_emotions(self, character):
+    def get_characters_list(self):
+        return list(self.characters_data.keys())
+
+    def get_character_emotions_list(self, character):
         return self.characters_data[character]["emotions"]
 
     def is_character_disabled(self, character):
@@ -120,7 +123,7 @@ class FifteenAPI:
             resp["status"] = "character not found"
             return resp
 
-        if not emotion in self.get_character_emotions(character):
+        if not emotion in self.get_character_emotions_list(character):
             resp["status"] = "emotion not found"
             return resp
 
@@ -196,7 +199,7 @@ if __name__ == "__main__":
         print("Input character:")
         character = input()
         if (character in fifteen.characters_data):
-            emotions = fifteen.get_character_emotions(character)
+            emotions = fifteen.get_character_emotions_list(character)
             emotion = None
             if len(emotions) > 1:
                 print(f"Input emotion [{emotions}]:")
