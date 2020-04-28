@@ -29,7 +29,7 @@ Grab the `fifteen_api.py` and throw it where you want to use it.
 
 ## Usage
 ### As command line tool:
-You can use `fifteen_api.py` as a standalone executable in terminal. Launch it with
+You can use `fifteen_api.py` as executable in terminal. Launch it with
 
     python3 fifteen_api.py
  You will get a list of characters and their available emotions, and you can use them right there to get your text-to-speech dreams come true as .wav files.
