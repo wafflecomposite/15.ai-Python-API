@@ -4,18 +4,8 @@ from fifteen_api import FifteenAPI
 # initialization
 tts_api = FifteenAPI(show_debug=True)
 
-# print characters and their available emotions to console
-tts_api.print_characters()
-
 # be aware that there is a serverside max text length. If text is too long, it will be trimmed.
 print(tts_api.max_text_len)
-
-# get characters list
-print(tts_api.get_characters_list())
-
-# get characters list
-print(tts_api.get_character_emotions_list("Twilight Sparkle"))
-
 ### valid usage examples
 
 # get tts raw bytes (well, assuming that Fluttershy is not currently disabled)
@@ -65,8 +55,3 @@ response = tts_api.save_to_file("Fluttershy", "Neutral", "...test?", "tts.wav")
 assert response["status"] != "OK"
 assert response["filename"] == None
 print(response)
-
-# assume that whole 15.ai website is currently down (or format changed or whatever). It's gonna crash.
-tts_api.app_page_url = "https://example.com/eh"
-tts_api.update_characters_status()
-response = tts_api.save_to_file("Fluttershy", "Neutral", "oof", "tts.wav")

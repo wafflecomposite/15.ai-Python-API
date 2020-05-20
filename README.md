@@ -32,7 +32,7 @@ Grab the `fifteen_api.py` and throw it where you want to use it.
 You can use `fifteen_api.py` as executable in terminal. Launch it with
 
     python3 fifteen_api.py
- You will get a list of characters and their available emotions, and you can use them right there to get your text-to-speech dreams come true as .wav files.
+ ~~You will get a list of characters and their available emotions, and you can~~ Visit https://fifteen.ai/app, find the character's name and the suitable emotion, and use them right there to get your text-to-speech dreams come true as .wav files. (**WARNING**: Character's name and emotions are case sensitive! You'll get a server error if you type them in incorrectly.)
 ### As imported module in python code:
 Suppose you put `fifteen_api.py` next to the file in which you want to use it:
 #### Import class:
@@ -46,19 +46,6 @@ Alternatively, to get verbose output:
 
     tts_api = FifteenAPI(show_debug=True)
 
-#### Get characters list:
-
-    tts_api.get_characters_list()
-Example output
-
-    ['Twilight Sparkle', 'Fluttershy', 'Rarity', 'Applejack', 'Rainbow Dash', 'Pinkie Pie', 'GLaDOS', 'Wheatley', 'Chell']
-#### Get character emotions:
-
-    tts_api.get_character_emotions_list("Twilight Sparkle")
-
-Example output:
-
-    ['Happy', 'Neutral']
 #### Save TTS to file:
 
     tts_api.save_to_file("Fluttershy", "Neutral", "This is a test text", "my_tts_file.wav")

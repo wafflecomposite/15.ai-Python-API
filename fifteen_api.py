@@ -28,12 +28,7 @@ class FifteenAPI:
         "user-agent": "python-requests 15.ai-Python-API(https://github.com/wafflecomposite/15.ai-Python-API)"
     }
 
-    app_page_url = "https://fifteen.ai"
-    app_js_url = None  # set dinamically
     tts_url = "https://api.fifteen.ai/app/getAudioFile"
-
-    characters_show_data = {}  # set dinamically
-    characters_data = {}  # same but without show keys
 
 
     def __init__(self, show_debug = False):
@@ -42,94 +37,12 @@ class FifteenAPI:
         else:
             self.logger.setLevel(logging.WARNING)
         self.logger.info("FifteenAPI initialization")
-        self.update_characters_status()
 
-    def update_characters_status(self):
-        self.characters_show_data = {}  # set dinamically
-        self.characters_data = {}  # same but without show keys
-        self.logger.info('Performing character status update...')
-        self.logger.info('Getting 15.ai app page...')
-        response = requests.get(self.app_page_url, headers=self.tts_headers)
-
-        if response.status_code == 200:
-            matches = re.findall(r"(/js/app\.[A-z0-9]{8}\.js)", response.text)
-            if len(matches) == 0:
-                raise ValueError('[15API]Error: can\t find app script url on main app page.')
-            else:
-                self.app_js_url = self.app_page_url + matches[0]
-
-        else:
-            raise ConnectionError(f'[15API]Error while getting main app page. Status code: {response.status_code}')
-
-        if self.app_js_url:
-            self.logger.info('Getting 15.ai app js...')
-            response = requests.get(self.app_js_url, headers=self.tts_headers)
-
-            if response.status_code == 200:
-                matches = re.findall(r"Q=(.*),V=", response.text)
-                if len(matches) == 0:
-                    raise ValueError('[15API]Error: can\t find characters data in app js.\nMost likely, the format has changed and requires updating the code.')
-                else:
-                    characters_data = re.sub(r"(\$)(\w+:)(!)", r'\g<2>',  matches[0])
-                    characters_data = re.sub(r"([,{])(\w+)(:)", r'\g<1>"\g<2>"\g<3>', characters_data)
-                    try:
-                        characters_data = json.loads(characters_data)
-                    except json.decoder.JSONDecodeError:
-                        raise ValueError("[15API]Error while parsing app js.\nMost likely, the format has changed and requires updating the code.'")
-
-                    for show_name, show_char_list in characters_data.items():
-                        for character in show_char_list:
-                            if not show_name in self.characters_show_data:
-                                self.characters_show_data[show_name] = []
-                            self.characters_show_data[show_name].append({
-                                "name": character['name'],
-                                "emotions": character['emotions'],
-                                "disabled": not character.get('isDisabled', 1)
-                                })
-                            self.characters_data[character['name']] = {
-                                "emotions": character['emotions'],
-                                "disabled": not character.get('isDisabled', 1)
-                                }
-
-            else:
-                raise ConnectionError(f'[15API]Error while getting app JS. Status code: {response.status_code}')
-
-    def print_characters(self):
-        for show_name, show_char_list in self.characters_show_data.items():
-            print(show_name)
-            for character in show_char_list:
-                disabled_str = ""
-                if (character['disabled']):
-                    disabled_str = "[DISABLED] "
-                print(f"  {disabled_str}'{character['name']}', emotions: {character['emotions']}")
-
-    def is_character_exist(self, character):
-        return character in self.characters_data
-
-    def get_characters_list(self):
-        return list(self.characters_data.keys())
-
-    def get_character_emotions_list(self, character):
-        return self.characters_data[character]["emotions"]
-
-    def is_character_disabled(self, character):
-        return self.characters_data[character]["disabled"]
 
     def get_tts_raw(self, character, emotion, text):
 
         resp = {"status": "NOT SET", "data": None}
 
-        if not self.is_character_exist(character):
-            resp["status"] = "character not found"
-            return resp
-
-        if not emotion in self.get_character_emotions_list(character):
-            resp["status"] = "emotion not found"
-            return resp
-
-        if self.is_character_disabled(character):
-            resp["status"] = "emotion is currently disabled"
-            return resp
 
         text_len = len(text)
         if text_len > self.max_text_len:
@@ -186,36 +99,18 @@ class FifteenAPI:
         
 
 
-
 if __name__ == "__main__":
     fifteen = FifteenAPI(show_debug = True)
 
-    print("Available characters:")
-    fifteen.print_characters()
-    print()
+    print("Visit https://fifteen.ai/app to find available characters and their emotions.")
 
     input_str = None
     while input_str != "quit":
-        print("Input character:")
+        print("Input character (Case sensitive!):")
         character = input()
-        if (character in fifteen.characters_data):
-            emotions = fifteen.get_character_emotions_list(character)
-            emotion = None
-            if len(emotions) > 1:
-                print(f"Input emotion [{emotions}]:")
-                emotion = input()
-                if emotion not in emotions:
-                    print("Emotion not found")
-                    continue
-            elif len(emotions) == 1:
-                emotion = emotions[0]
-                print(f"Using only available emotion ({emotion})")
-            else:
-                print("Error: no emotions available for this character (???)")
-                continue
-            print("Input text:")
-            text = input()
-            print("Processing...")
-            fifteen.save_to_file(character, emotion, text)
-        else:
-            print(f"Character not found (character)")
+        print(f"Input emotion (Case sensitive!):")
+        emotion = input()
+        print("Input text:")
+        text = input()
+        print("Processing...")
+        fifteen.save_to_file(character, emotion, text)
