@@ -12,7 +12,7 @@ class FifteenAPI:
     logger = logging.getLogger('15API')
     logger.addHandler(logging.StreamHandler())
 
-    max_text_len = 140
+    max_text_len = 500
 
     tts_headers = {
         "accept": "application/json, text/plain, */*",
@@ -28,7 +28,7 @@ class FifteenAPI:
         "user-agent": "python-requests 15.ai-Python-API(https://github.com/wafflecomposite/15.ai-Python-API)"
     }
 
-    tts_url = "https://api.fifteen.ai/app/getAudioFile"
+    tts_url = "https://api.15.ai/app/getAudioFile"
 
 
     def __init__(self, show_debug = False):
