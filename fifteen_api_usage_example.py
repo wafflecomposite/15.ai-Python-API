@@ -9,26 +9,26 @@ print(tts_api.max_text_len)
 ### valid usage examples
 
 # get tts raw bytes (well, assuming that Fluttershy is not currently disabled)
-response = tts_api.get_tts_raw("Fluttershy", "Neutral", "This is a test")
+response = tts_api.get_tts_raw("Fluttershy", "High / Fast", "This is a test")
 assert response["status"] == "OK"
 assert len(response["data"]) > 100000  # those are .wav audiofile bytes
 
 # save tts to file with generated filename
-response = tts_api.save_to_file("Fluttershy", "Neutral", "This is another test")
+response = tts_api.save_to_file("Fluttershy", "High / Fast", "This is another test")
 assert response["status"] == "OK"
 assert response["filename"] != None  # this is a generated filename of TTS file
 print(response)
 os.remove(response["filename"])
 
 # save tts to file with target filename.
-response = tts_api.save_to_file("Fluttershy", "Neutral", "One more test", "tts.wav")
+response = tts_api.save_to_file("Fluttershy", "High / Fast", "One more test", "tts.wav")
 assert response["status"] == "OK"
 assert response["filename"] == "tts.wav"
 print(response)
 os.remove("tts.wav")
 
 # if filename doesn't end with '.wav', it will be added automatically
-response = tts_api.save_to_file("Fluttershy", "Neutral", "Last one valid test", "randomfilename")
+response = tts_api.save_to_file("Fluttershy", "High / Fast", "Last one valid test", "randomfilename")
 assert response["status"] == "OK"
 assert response["filename"] == "randomfilename.wav"
 print(response)
