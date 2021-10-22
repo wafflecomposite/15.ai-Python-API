@@ -32,7 +32,7 @@ Grab the `fifteen_api.py` and throw it where you want to use it.
 You can use `fifteen_api.py` as executable in terminal. Launch it with
 
     python3 fifteen_api.py
- ~~You will get a list of characters and their available emotions, and you can~~ Visit https://fifteen.ai/app, find the character's name and the suitable emotion, and use them right there to get your text-to-speech dreams come true as .wav files. (**WARNING**: Character's name and emotions are case sensitive! You'll get a server error if you type them in incorrectly.)
+ ~~You will get a list of characters and their available emotions, and you can~~ Visit https://fifteen.ai/app, find the character's name, and use them right there to get your text-to-speech dreams come true as .wav files. (**WARNING**: Character's name is case sensitive! You'll get a server error if you type them in incorrectly.)
 ### As imported module in python code:
 Suppose you put `fifteen_api.py` next to the file in which you want to use it:
 #### Import class:
@@ -48,24 +48,24 @@ Alternatively, to get verbose output:
 
 #### Save TTS to file:
 
-    tts_api.save_to_file("Fluttershy", "Neutral", "This is a test text", "my_tts_file.wav")
+    tts_api.save_to_file("Fluttershy", "This is a test text", "my_tts_file.wav")
 Alternatively, to automatically generate a unique file name
 
-    tts_api.save_to_file("Fluttershy", "Neutral", "This is a test text")
+    tts_api.save_to_file("Fluttershy", "This is a test text")
 Example output on successful request: 
 
 
     {'status': 'OK', 'filename': '15ai-Fluttershy-Thisisatestte-1588057995.wav'}
 Example output on failed request: 
 
-     {'status': 'Reason_why_it_failed', 'filename': None}
+    {'status': 'Reason_why_it_failed', 'filename': None}
 #### Get TTS as bytes:
 
-    response = tts_api.get_tts_raw("Fluttershy", "Neutral", "This is a test text")
+    response = tts_api.get_tts_raw("Fluttershy", "This is a test text")
 Example output on successful request: 
 
 
     {'status': 'OK', 'data': b'th3r3g03sy0urbyt3s'}
 Example output on failed request: 
 
-     {'status': 'Reason_why_it_failed', 'data': None}
+    {'status': 'Reason_why_it_failed', 'data': None}

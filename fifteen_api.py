@@ -28,7 +28,8 @@ class FifteenAPI:
         "user-agent": "python-requests 15.ai-Python-API(https://github.com/wafflecomposite/15.ai-Python-API)"
     }
 
-    tts_url = "https://api.15.ai/app/getAudioFile"
+    tts_url = "https://api.15.ai/app/getAudioFile5"
+    audio_url = "https://cdn.15.ai/audio/"
 
 
     def __init__(self, show_debug = False):
@@ -39,7 +40,7 @@ class FifteenAPI:
         self.logger.info("FifteenAPI initialization")
 
 
-    def get_tts_raw(self, character, emotion, text):
+    def get_tts_raw(self, character, text):
 
         resp = {"status": "NOT SET", "data": None}
 
@@ -57,9 +58,8 @@ class FifteenAPI:
 
         self.logger.info(f'Target text: [{text}]')
         self.logger.info(f'Character: [{character}]')
-        self.logger.info(f'Emotion: [{emotion}]')
 
-        data = json.dumps({"text": text, "character": character, "emotion": emotion})
+        data = json.dumps({"text": text, "character": character, "emotion": "Contextual"})
 
         self.logger.info('Waiting for 15.ai response...')
 
@@ -71,17 +71,28 @@ class FifteenAPI:
             return resp
 
         if response.status_code == 200:
-            resp["status"] = "OK"
-            resp["data"] = response.content
-            self.logger.info(f"15.ai API response success")
-            return resp
+
+            resp["response"] = response.json()
+            resp["audio_uri"] = resp["response"]["wavNames"][0]
+
+            try:
+                responseAudio = requests.get(self.audio_url+resp["audio_uri"], headers=self.tts_headers)
+                resp["status"] = "OK"
+                resp["data"] = responseAudio.content
+                self.logger.info(f"15.ai API response success")
+                return resp
+            except requests.exceptions.ConnectionError as e:
+                resp["status"] = f"ConnectionError ({e})"
+                self.logger.error(f"ConnectionError ({e})")
+                return resp
+ 
         else:
             self.logger.error(f'15.ai API request error, Status code: {response.status_code}')
             resp["status"] = f'15.ai API request error, Status code: {response.status_code}'
         return resp
         
-    def save_to_file(self, character, emotion, text, filename=None):
-        tts = self.get_tts_raw(character, emotion, text)
+    def save_to_file(self, character, text, filename=None):
+        tts = self.get_tts_raw(character, text)
         if tts["status"] == "OK" and tts["data"] is not None:
             if filename is None:
                 char_filename_part = "".join(x for x in character[:10] if x.isalnum())
@@ -102,15 +113,13 @@ class FifteenAPI:
 if __name__ == "__main__":
     fifteen = FifteenAPI(show_debug = True)
 
-    print("Visit https://fifteen.ai/app to find available characters and their emotions.")
+    print("Visit https://fifteen.ai/app to find available characters.")
 
     input_str = None
     while input_str != "quit":
         print("Input character (Case sensitive!):")
         character = input()
-        print(f"Input emotion (Case sensitive!):")
-        emotion = input()
         print("Input text:")
         text = input()
         print("Processing...")
-        fifteen.save_to_file(character, emotion, text)
+        fifteen.save_to_file(character, text)
